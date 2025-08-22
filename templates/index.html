@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Task 3 — Model Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+      body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:2rem;line-height:1.5}
+      .card{max-width:900px;margin:auto;padding:1.25rem;border:1px solid #ddd;border-radius:12px}
+      .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+      label{font-size:.9rem;color:#333}
+      input{width:100%;padding:.6rem;border:1px solid #bbb;border-radius:8px}
+      button{padding:.7rem 1rem;border:0;border-radius:8px;background:#111;color:#fff;cursor:pointer}
+      .muted{color:#666;font-size:.9rem}
+      .result{background:#f5f5f5;padding:1rem;border-radius:8px;margin-top:1rem}
+      .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+      code{background:#f2f2f2;padding:.15rem .35rem;border-radius:6px}
+      .footer{margin-top:1.25rem}
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="header">
+        <h2>Diabetes Progression — FastAPI Demo</h2>
+        <div><a href="/docs">Open API docs</a></div>
+      </div>
+      <p class="muted">
+        Enter feature values below and submit to get a prediction from the trained model.
+      </p>
+
+      <form method="post" action="/web-predict">
+        <div class="grid">
+          {% for f in features %}
+          <div>
+            <label for="{{ f }}">{{ f }}</label>
+            <input id="{{ f }}" name="{{ f }}" type="number" step="any"
+                   value="{{ (last_input[f] if last_input and f in last_input else 0) }}">
+          </div>
+          {% endfor %}
+        </div>
+        <div class="footer">
+          <button type="submit">Predict</button>
+        </div>
+      </form>
+
+      {% if prediction is defined %}
+      <div class="result">
+        <strong>Prediction:</strong> {{ prediction }}
+        <div class="muted">Target: disease_progression (arbitrary units)</div>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
